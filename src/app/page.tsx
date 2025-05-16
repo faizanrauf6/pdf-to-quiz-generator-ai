@@ -1,7 +1,7 @@
 "use client";
 
 import type { ChangeEvent } from 'react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ export default function HomePage() {
   const [appState, setAppState] = useState<AppState>('upload');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { toast } = useToast();
 
@@ -53,6 +54,10 @@ export default function HomePage() {
         });
         setPdfFile(null);
         setPdfDataUri(null);
+        // Clear file input field
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
         return;
       }
       setPdfFile(file);
@@ -72,6 +77,8 @@ export default function HomePage() {
         description: "Please upload a PDF file to generate a quiz.",
         variant: "destructive",
       });
+      setPdfFile(null);
+      setPdfDataUri(null);
       return;
     }
 
@@ -147,7 +154,7 @@ export default function HomePage() {
             <CardContent className="space-y-6">
               <div>
                 <Label htmlFor="pdf-upload" className="text-base">Choose PDF File</Label>
-                <Input id="pdf-upload" type="file" accept=".pdf" onChange={handleFileChange}
+                <Input id="pdf-upload" type="file" accept=".pdf" ref={fileInputRef} onChange={handleFileChange}
                   className="mt-2 file:mr-4 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                 />
               </div>

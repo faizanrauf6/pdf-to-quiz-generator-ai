@@ -1,1 +1,1 @@
-# Creativeminds PDFs Quiz Generator
+# Creativeminds PDFs Quiz Generator - AI
